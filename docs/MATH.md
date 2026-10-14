@@ -84,7 +84,7 @@ $$\boxed{\;\lambda_{\mathrm{trace}}(r)=-N\sum_{i=r+1}^{n}\ln\left(1-\hat\lambda_
 Intuition: if the true rank is $r$, the $n-r$ smallest canonical correlations are zero, so each $\ln(1-\hat\lambda_i)\approx0$ and the statistic is small.
 
 **Null distribution.** Not $\chi^2$, because $Y_{t-1}$ is non-stationary. Asymptotically
-$$\lambda_{\mathrm{trace}}(r)\;\Rightarrow\;\mathrm{tr}\left\{\int_0^1 dB\,F^\top\left(\int_0^1FF^\top du\right)^{-1}\int_0^1F\,dB^\top\right\},$$
+$$\lambda_{\mathrm{trace}}(r)\;\Rightarrow\;\mathrm{tr}\left\lbrace\int_0^1 dB\,F^\top\left(\int_0^1FF^\top du\right)^{-1}\int_0^1F\,dB^\top\right\rbrace,$$
 where $B$ is an $(n-r)$-dimensional standard Brownian motion and $F$ a function of $B$ that depends on the deterministic terms. It is tabulated by simulation (MacKinnon–Haug–Michelis 1999; the 95% values `3.84, 15.49, 29.80, 47.85, 69.82` for $n-r=1,\dots,5$ are in the code).
 
 **Sequential procedure.** Test $r=0$; if rejected, test $r\le1$; and so on. Stop at the first non-rejection. The rank is the number of rejections.
