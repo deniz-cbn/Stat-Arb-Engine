@@ -45,13 +45,13 @@ This is the **vector error-correction model (VECM)**. In the code, $k$ is `k_ar_
 
 ### 2.2 Rank of $\Pi$ is the cointegration rank
 
-* $\operatorname{rank}\Pi=0$: $\Pi=0$, the system is a VAR in differences, with no long-run relation.
-* $\operatorname{rank}\Pi=n$: $Y_t$ is stationary in levels.
-* $0<\operatorname{rank}\Pi=r<n$: $\Pi=\alpha\beta^\top$ with $\alpha,\beta\in\mathbb R^{n\times r}$ (Granger representation theorem).
+* $\mathrm{rank}\Pi=0$: $\Pi=0$, the system is a VAR in differences, with no long-run relation.
+* $\mathrm{rank}\Pi=n$: $Y_t$ is stationary in levels.
+* $0<\mathrm{rank}\Pi=r<n$: $\Pi=\alpha\beta^\top$ with $\alpha,\beta\in\mathbb R^{n\times r}$ (Granger representation theorem).
 
 Then $\beta^\top Y_{t-1}$ are the $r$ stationary spreads and $\alpha$ are the **adjustment (speed-of-correction) coefficients**: how strongly each series reacts to last period's disequilibrium. The left-hand side $\Delta Y_t$ and everything on the right other than $\Pi Y_{t-1}$ is $I(0)$, so $\Pi Y_{t-1}$ must be $I(0)$ too, which forces $\beta^\top Y\sim I(0)$.
 
-Testing $H_0:\operatorname{rank}\Pi\le r$ is therefore a test of rank. Note that $\beta$ is only identified up to a basis of its column space, so the code normalises each vector so its first coefficient equals 1:
+Testing $H_0:\mathrm{rank}\Pi\le r$ is therefore a test of rank. Note that $\beta$ is only identified up to a basis of its column space, so the code normalises each vector so its first coefficient equals 1:
 $\beta=(1,-\gamma)^\top$ for a pair, meaning *long 1 unit of A, short $\gamma$ units of B (in log terms)*.
 
 ### 2.3 Concentrating out nuisance parameters (Frisch–Waugh)
@@ -79,12 +79,12 @@ $$L_{\max}^{-2/N}\propto|S_{00}|\prod_{i=1}^r(1-\hat\lambda_i).$$
 
 ### 2.5 The trace statistic
 
-The likelihood-ratio statistic for $H_0:\operatorname{rank}\le r$ against $H_1:\operatorname{rank}=n$:
+The likelihood-ratio statistic for $H_0:\mathrm{rank}\le r$ against $H_1:\mathrm{rank}=n$:
 $$\boxed{\;\lambda_{\rm trace}(r)=-N\sum_{i=r+1}^{n}\ln\big(1-\hat\lambda_i\big)\;}$$
 Intuition: if the true rank is $r$, the $n-r$ smallest canonical correlations are zero, so each $\ln(1-\hat\lambda_i)\approx0$ and the statistic is small.
 
 **Null distribution.** Not $\chi^2$, because $Y_{t-1}$ is non-stationary. Asymptotically
-$$\lambda_{\rm trace}(r)\;\Rightarrow\;\operatorname{tr}\Big\{\int_0^1 dB\,F^\top\Big(\int_0^1FF^\top du\Big)^{-1}\int_0^1F\,dB^\top\Big\},$$
+$$\lambda_{\rm trace}(r)\;\Rightarrow\;\mathrm{tr}\Big\{\int_0^1 dB\,F^\top\Big(\int_0^1FF^\top du\Big)^{-1}\int_0^1F\,dB^\top\Big\},$$
 where $B$ is an $(n-r)$-dimensional standard Brownian motion and $F$ a function of $B$ that depends on the deterministic terms. It is tabulated by simulation (MacKinnon–Haug–Michelis 1999; the 95% values `3.84, 15.49, 29.80, 47.85, 69.82` for $n-r=1,\dots,5$ are in the code).
 
 **Sequential procedure.** Test $r=0$; if rejected, test $r\le1$; and so on. Stop at the first non-rejection. The rank is the number of rejections.
@@ -112,7 +112,7 @@ $$\beta^\top Y_t=(\Lambda^\top\beta)^\top F_t+\beta^\top u_t .$$
 For this to be stationary the $I(1)$ part must vanish:
 $$\boxed{\Lambda^\top\beta=0}$$
 i.e. **$\beta$ is orthogonal to the loadings on every common stochastic trend**. Hence the spread has zero long-run exposure to those factors. In return space, with $r_t=\Lambda f_t+\Delta u_t$ ($f_t=\Delta F_t$),
-$$\operatorname{Cov}\!\big(\beta^\top r_t,\;f_t\big)=\beta^\top\Lambda\operatorname{Var}(f_t)=0 .$$
+$$\mathrm{Cov}\!\big(\beta^\top r_t,\;f_t\big)=\beta^\top\Lambda\mathrm{Var}(f_t)=0 .$$
 So cointegration does not just *hope* for neutrality. It is *equivalent* to the hedge ratio cancelling the common-trend exposure, and this is the precise sense in which the strategy "isolates structural mispricing from broad market beta".
 
 > **Caveat (tested, not assumed).** This is exact only for the common $I(1)$ factors. Short-run, time-varying betas can leak through, so the backtest *reports* the realised regression beta of strategy returns on the equal-weight market (`market_beta`) instead of assuming it is zero.
@@ -136,10 +136,10 @@ $$\boxed{X_t=\mu+(X_0-\mu)e^{-\kappa t}+\sigma\int_0^te^{-\kappa(t-s)}dW_s}$$
 
 The stochastic integral is a zero-mean Gaussian, and by the Itô isometry
 $$\mathbb E[X_t]=\mu+(X_0-\mu)e^{-\kappa t},\qquad
-\operatorname{Var}[X_t]=\sigma^2\!\int_0^te^{-2\kappa(t-s)}ds=\frac{\sigma^2}{2\kappa}\big(1-e^{-2\kappa t}\big).$$
+\mathrm{Var}[X_t]=\sigma^2\!\int_0^te^{-2\kappa(t-s)}ds=\frac{\sigma^2}{2\kappa}\big(1-e^{-2\kappa t}\big).$$
 As $t\to\infty$ the law converges to the **stationary distribution**
 $$X_\infty\sim N\!\Big(\mu,\ \sigma_{\rm eq}^2\Big),\qquad \boxed{\sigma_{\rm eq}=\frac{\sigma}{\sqrt{2\kappa}}}$$
-with autocovariance $\operatorname{Cov}(X_t,X_{t+\tau})=\sigma_{\rm eq}^2e^{-\kappa\tau}$.
+with autocovariance $\mathrm{Cov}(X_t,X_{t+\tau})=\sigma_{\rm eq}^2e^{-\kappa\tau}$.
 
 ### 4.3 Half-life
 
@@ -195,24 +195,24 @@ Larger $a$ means more profit per trade but fewer trades. Costs penalise small $a
 
 Centre $X$ at $\mu$. Expected hitting times $T(x)$ solve $\mathcal L T=-1$ with the OU generator $\mathcal L=-\kappa x\,\partial_x+\tfrac{\sigma^2}2\partial_{xx}$:
 $$\tfrac{\sigma^2}{2}T''-\kappa xT'=-1\iff\Big(e^{-\kappa x^2/\sigma^2}T'\Big)'=-\frac2{\sigma^2}e^{-\kappa x^2/\sigma^2}.$$
-Use the dimensionless coordinate $u=x\sqrt\kappa/\sigma$ and the identity $\int_0^xe^{-\kappa y^2/\sigma^2}dy=\frac{\sigma}{\sqrt\kappa}\frac{\sqrt\pi}2\operatorname{erf}(u)$.
+Use the dimensionless coordinate $u=x\sqrt\kappa/\sigma$ and the identity $\int_0^xe^{-\kappa y^2/\sigma^2}dy=\frac{\sigma}{\sqrt\kappa}\frac{\sqrt\pi}2\mathrm{erf}(u)$.
 
 *Hold phase*, from $a$ back to $0$ (boundary $T(0)=0$, natural at $+\infty$):
-$$\mathbb E[\tau_{\rm hold}]=\frac{\sqrt\pi}{\kappa}\int_0^{u_a}e^{u^2}\operatorname{erfc}(u)\,du .$$
+$$\mathbb E[\tau_{\rm hold}]=\frac{\sqrt\pi}{\kappa}\int_0^{u_a}e^{u^2}\mathrm{erfc}(u)\,du .$$
 *Wait phase*, from $0$ until exit of $(-a,a)$ (boundary $T(\pm a)=0$, symmetry $T'(0)=0$):
-$$\mathbb E[\tau_{\rm wait}]=\frac{\sqrt\pi}{\kappa}\int_0^{u_a}e^{u^2}\operatorname{erf}(u)\,du .$$
-**They add up to something remarkably clean**: since $\operatorname{erf}+\operatorname{erfc}=1$,
-$$\mathbb E[\tau_{\rm cycle}]=\frac{\sqrt\pi}{\kappa}\int_0^{u_a}e^{u^2}du=\boxed{\frac{\pi}{2\kappa}\,\operatorname{erfi}\!\Big(\frac{z^*}{\sqrt2}\Big)}$$
-using $u_a=a\sqrt\kappa/\sigma=z^*/\sqrt2$ and $\operatorname{erfi}(w)=\frac2{\sqrt\pi}\int_0^we^{t^2}dt$.
+$$\mathbb E[\tau_{\rm wait}]=\frac{\sqrt\pi}{\kappa}\int_0^{u_a}e^{u^2}\mathrm{erf}(u)\,du .$$
+**They add up to something remarkably clean**: since $\mathrm{erf}+\mathrm{erfc}=1$,
+$$\mathbb E[\tau_{\rm cycle}]=\frac{\sqrt\pi}{\kappa}\int_0^{u_a}e^{u^2}du=\boxed{\frac{\pi}{2\kappa}\,\mathrm{erfi}\!\Big(\frac{z^*}{\sqrt2}\Big)}$$
+using $u_a=a\sqrt\kappa/\sigma=z^*/\sqrt2$ and $\mathrm{erfi}(w)=\frac2{\sqrt\pi}\int_0^we^{t^2}dt$.
 (`expected_cycle_time`; the two-quadrature version `expected_time_numeric` is unit-tested against it, and a 2-million-step Monte-Carlo simulation agrees within 8%.)
 
 ### 6.4 The optimal threshold
 
 Writing $\tilde c=c/\sigma_{\rm eq}$,
-$$\text{Rate}(z)=\frac{2\kappa\,\sigma_{\rm eq}}{\pi}\cdot\frac{z-\tilde c}{\operatorname{erfi}(z/\sqrt2)},\qquad
-z^*=\arg\max_{z>\tilde c}\frac{z-\tilde c}{\operatorname{erfi}(z/\sqrt2)} .$$
-Setting the derivative to zero, using $\frac d{dz}\operatorname{erfi}(z/\sqrt2)=\sqrt{2/\pi}\,e^{z^2/2}$, gives the first-order condition
-$$\operatorname{erfi}\!\Big(\frac{z^*}{\sqrt2}\Big)=\sqrt{\frac2\pi}\,(z^*-\tilde c)\,e^{z^{*2}/2},$$
+$$\text{Rate}(z)=\frac{2\kappa\,\sigma_{\rm eq}}{\pi}\cdot\frac{z-\tilde c}{\mathrm{erfi}(z/\sqrt2)},\qquad
+z^*=\arg\max_{z>\tilde c}\frac{z-\tilde c}{\mathrm{erfi}(z/\sqrt2)} .$$
+Setting the derivative to zero, using $\frac d{dz}\mathrm{erfi}(z/\sqrt2)=\sqrt{2/\pi}\,e^{z^2/2}$, gives the first-order condition
+$$\mathrm{erfi}\!\Big(\frac{z^*}{\sqrt2}\Big)=\sqrt{\frac2\pi}\,(z^*-\tilde c)\,e^{z^{*2}/2},$$
 solved numerically by `optimal_entry_threshold`. Properties, all visible in `docs/img/optimal_threshold.png`:
 
 * $z^*$ depends **only on the cost-to-volatility ratio** $\tilde c$, not on $\kappa$. Speed scales the *rate* (profit per day) but not the *location* of the optimum.
@@ -235,7 +235,7 @@ Unit tests verify that appending future data does not change earlier P&L (`test_
 
 **Portfolio.** The top-$N$ pairs (ranked by trace statistic over its critical value) each get capital $1/N$; unfilled slots stay in cash.
 
-**Metrics** (`metrics.py`): annualised Sharpe $=\sqrt{252}\,\bar r/s_r$, CAGR, max drawdown, and the regression beta $\beta_M=\operatorname{Cov}(r,r_M)/\operatorname{Var}(r_M)$ against the equal-weight universe.
+**Metrics** (`metrics.py`): annualised Sharpe $=\sqrt{252}\,\bar r/s_r$, CAGR, max drawdown, and the regression beta $\beta_M=\mathrm{Cov}(r,r_M)/\mathrm{Var}(r_M)$ against the equal-weight universe.
 
 ---
 
